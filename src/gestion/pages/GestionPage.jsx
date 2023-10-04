@@ -9,7 +9,7 @@ export const GestionPage = () => {
 
     <GestionLayout>
      
-      <Typography>Gestion Page</Typography>
+      {/* <Typography>Gestion Page</Typography> */}
      
 
     </GestionLayout>

@@ -1,6 +1,7 @@
 import { Box, Card, Toolbar } from "@mui/material"
 import { NavBar } from "../components/NavBar";
 import { SideBar, CardTask } from "../components";
+import { CardContainer } from "../components/CardContainer";
 
 
 
@@ -14,13 +15,13 @@ export const GestionLayout = ( { children } ) => {
         <NavBar drawerWidth={ drawerWidth }/>
 
         {/* SideBar */}
-        <SideBar drawerWidth= { drawerWidth }/>
+        {/* <SideBar drawerWidth= { drawerWidth }/> */}
         <Box component='main'
         sx={{ flexGrow: 1, p:3}}>
             <Toolbar/>
 
             { children }
-            <CardTask/>
+            <CardContainer/>
         </Box>
     </Box>
   )
