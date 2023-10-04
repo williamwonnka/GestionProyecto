@@ -16,6 +16,10 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => 
     setShowModal(true);
   };
 
+  const formStyle = {
+    margin: '80px', // Adjust the value to set the desired margin
+  };
+
   // Función para cerrar el modal
   const closeModal = () => {
     setSelectedTask(null);
@@ -71,7 +75,7 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => 
       </Card>
 
       {/* Modal para mostrar detalles de la tarea o agregar/editar una tarea */}
-      <Modal show={showModal} onHide={closeModal}>
+      <Modal show={showModal} onHide={closeModal} style={formStyle}>
         <Modal.Header closeButton>
           <Modal.Title>Detalles de la Tarea</Modal.Title>
         </Modal.Header>

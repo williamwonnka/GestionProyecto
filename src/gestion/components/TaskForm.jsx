@@ -43,6 +43,12 @@ export const TaskForm = ({ task, addTask, closeModal, onTaskEdit }) => {
           [name]: value,
         }));
       };
+
+      
+        const formButton = {
+            margin: '10px', // Adjust the value to set the desired margin
+        };
+
       
     
       // Función para manejar el envío del formulario
@@ -149,7 +155,7 @@ export const TaskForm = ({ task, addTask, closeModal, onTaskEdit }) => {
           </Form.Group>
     
           {/* Botón para guardar los cambios o agregar una nueva tarea */}
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" style={formButton}>
             Guardar
           </Button>
         </Form>
