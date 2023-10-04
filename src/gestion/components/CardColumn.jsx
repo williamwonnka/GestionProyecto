@@ -1,11 +1,11 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { TaskForm } from './TaskForm';
 
-export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask } ) => {
+export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => {
 
     const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -29,6 +29,10 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask } ) =>
     const newStatus = title.toLowerCase().replace(' ', '-');
     onTaskMove(taskId, newStatus);
   };
+
+  useEffect(() => {
+    // Code to execute when tasks prop changes
+  }, [tasks]);
 
   return (
     <div
@@ -73,10 +77,10 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask } ) =>
         </Modal.Header>
         <Modal.Body>
           {/* Componente TaskForm para manejar el formulario de la tarea */}
-          <TaskForm task={tasks}
-          addTask={addTask}
-          onTaskEdit={editTask}
-          closeModal={closeModal}/>
+         <TaskForm
+         closeModal={closeModal}
+         addTask={addTask}
+         task={tasks}/>
           
         </Modal.Body>
       </Modal>

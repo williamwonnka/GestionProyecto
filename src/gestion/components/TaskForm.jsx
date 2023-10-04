@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 import React from 'react'
 
-export const TaskForm = ({ task, addTask, onTaskEdit, closeModal}) => {
+export const TaskForm = ({ task, addTask, closeModal, onTaskEdit }) => {
     const [formData, setFormData] = useState({
         id: '',
         title: '',
@@ -13,7 +13,7 @@ export const TaskForm = ({ task, addTask, onTaskEdit, closeModal}) => {
         assignee: '',
         assignedTo: '', 
         points: '', 
-        status: 'por-hacer', // Valor inicial del estado de la tarea
+        status: '', // Valor inicial del estado de la tarea
       });
     
       // Efecto para actualizar el estado del formulario cuando se selecciona una tarea existente para edición
@@ -30,25 +30,32 @@ export const TaskForm = ({ task, addTask, onTaskEdit, closeModal}) => {
             assignee: '',
             assignedTo: '',
             points: '',
-            status: 'por-hacer', // Estado por defecto para una nueva tarea
+            status: '', // Estado por defecto para una nueva tarea
           });
         }
       }, [task]);
     
       // Función para manejar cambios en los campos del formulario
       const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
       };
+      
     
       // Función para manejar el envío del formulario
       const handleSubmit = (e) => {
         e.preventDefault();
         if (task) {
           // Si task existe, significa que estamos editando una tarea existente
-          onTaskEdit(formData); // Llama a la función de edición con los nuevos datos del formulario
+        //   onTaskEdit(formData); // Llama a la función de edición con los nuevos datos del formulario
+        console.log(formData)
+        addTask(formData); // Llama a la función para agregar una nueva tarea con los datos del formulario
         } else {
           // Si no hay task (nueva tarea), agregamos una nueva tarea
-          addTask(formData); // Llama a la función para agregar una nueva tarea con los datos del formulario
+         
         }
         closeModal(); // Cierra el modal después de agregar o editar la tarea
       };
@@ -128,15 +135,17 @@ export const TaskForm = ({ task, addTask, onTaskEdit, closeModal}) => {
           <Form.Group controlId="status">
             <Form.Label>Estado de la Tarea</Form.Label>
             <Form.Control
-              as="select"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-            >
-              <option value="por-hacer">Por Hacer</option>
-              <option value="en-curso">En Curso</option>
-              <option value="listo">Listo</option>
-            </Form.Control>
+                as="select"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                >
+                <option value="" disabled>Please select an option...</option>
+                <option value="pending">Pending</option>
+                <option value="inprogress">In progress</option>
+                <option value="done">Done</option>
+                </Form.Control>
+
           </Form.Group>
     
           {/* Botón para guardar los cambios o agregar una nueva tarea */}
