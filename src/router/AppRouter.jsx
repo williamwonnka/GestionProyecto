@@ -1,17 +1,19 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import { AuthRoutes } from "../auth/routes/AuthRoutes"
 import { GestionRoutes } from "../gestion/routes/GestionRoutes"
 
 
 
+
 export const AppRouter = () => {
+
   return (
     <Routes>
-        {/* Login y Registro  */}
-        <Route path="/auth/*" element= { <AuthRoutes/> } />
+      {/* Routes accessible without logging in */}
+      <Route path="/auth/*" element={<AuthRoutes />} />
 
-        {/* After auth page */}
-        <Route path="/*" element={ <GestionRoutes/>}/>
+      {/* Protected routes (accessible only after authentication) */}
+      <Route path="/*" element={<GestionRoutes />} />
     </Routes>
   )
 }

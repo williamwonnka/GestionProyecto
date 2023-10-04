@@ -3,6 +3,15 @@ import { AppBar, Grid, IconButton, Toolbar, Typography } from "@mui/material"
 
 
 export const NavBar = ({drawerWidth = 240}) => {
+
+    const handleLogout = () => {
+        // Clear user session data from session storage
+        sessionStorage.removeItem('userData');
+        // Redirect to the login page
+        window.location.href = '/auth/login';
+    };
+    
+
   return (
     
     <AppBar
@@ -26,7 +35,7 @@ export const NavBar = ({drawerWidth = 240}) => {
             <Grid container direction='row' justifyContent='space-between' alignItems='center'>
                     <Typography variant='h6' noWrap component='div'></Typography>
                     
-                <IconButton color='error'>
+                <IconButton color='error' onClick={handleLogout}>
                     <LogoutOutlined/>
                 </IconButton>
 

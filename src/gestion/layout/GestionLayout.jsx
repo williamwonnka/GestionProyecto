@@ -7,6 +7,7 @@ import { CardContainer } from "../components/CardContainer";
 
 const drawerWidth = 240;
 
+
 export const GestionLayout = ( { children } ) => {
   return (
     <Box sx={{ display: 'flex' }}>

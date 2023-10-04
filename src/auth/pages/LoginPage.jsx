@@ -22,7 +22,8 @@ export const LoginPage = () => {
       });
 
       if (response.ok) {
-        
+        const userData = await response.json();
+        sessionStorage.setItem('userData', JSON.stringify(userData));
         window.location.href = '/Gestion/Dashboard'
       } else {
         console.log(response)
