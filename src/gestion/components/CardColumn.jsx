@@ -4,8 +4,9 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { TaskForm } from './TaskForm';
+import { AddTaskOutlined } from '@mui/icons-material';
 
-export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => {
+export const CardColumn = ( { title, tasks, addTask, onDrop, editTask} ) => {
 
     const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -26,14 +27,13 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => 
     setShowModal(false);
   };
 
-  // Función para manejar el evento de soltar una tarea en la columna
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const taskId = e.dataTransfer.getData('task-id');
-    const newStatus = title.toLowerCase().replace(' ', '-');
-    onTaskMove(taskId, newStatus);
-  };
-
+//   // Función para manejar el evento de soltar una tarea en la columna
+//   const handleDrop = (e) => {
+//     e.preventDefault();
+//     const taskId = e.dataTransfer.getData('task-id');
+//     onDrop(taskId); // Call the onDrop prop with the taskId when a task is dropped
+//   };
+  
   useEffect(() => {
     // Code to execute when tasks prop changes
   }, [tasks]);
@@ -41,7 +41,7 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => 
   return (
     <div
       className="col-md-3"
-      onDrop={handleDrop}
+      onDrop={(e) => onDrop(e)} 
       onDragOver={(e) => e.preventDefault()}
     >
       <Card>
@@ -51,14 +51,15 @@ export const CardColumn = ( { title, tasks, addTask, onTaskMove, editTask} ) => 
             {/* Mapeo de las tareas y creación de elementos de tarea */}
             {tasks.map((task) => (
               <div
-                key={task.id}
-                className="task"
-                draggable
-                onDragStart={(e) => {
-                  e.dataTransfer.setData('task-id', task.id);
-                }}
-                onClick={() => openModal(task)}
-              >
+              key={task.id}
+              className="task"
+              draggable
+              onDragStart={(e) => {
+                const taskId = task.id.toString();              
+                e.dataTransfer.setData('taskId', taskId); // Ensure task.id is set correctly
+              }}
+              onClick={() => openModal(task)}
+            >
                 <div>
                   <h5>{task.title}</h5>
                   <p>Encargado: {task.assignee}</p>

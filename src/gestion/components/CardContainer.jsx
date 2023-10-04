@@ -22,6 +22,7 @@ export const CardContainer = () => {
 
   
   const addTask = (task) => {
+    task.id=Date.now();
     setTasks(prevTasks => [...prevTasks, task]);
     closeModal();
   };
@@ -34,39 +35,51 @@ export const CardContainer = () => {
     closeModal();
   };
 
-  const moveTask = (taskId, newStatus) => {
+//   const moveTask = (taskId, newStatus) => {
+//     const updatedTasks = tasks.map((task) =>
+//       task.id === taskId ? { ...task, status: newStatus } : task
+//     );
+//     setTasks(updatedTasks);
+//   };
+  
+
+  const handleDrop = (e, newStatus) => {
+
+    e.preventDefault()
+    const taskId = e.dataTransfer.getData('taskId')
     const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, status: newStatus } : task
+    task.id.toString() === taskId ? { ...task, status: newStatus } : task
     );
     setTasks(updatedTasks);
   };
 
   return (
+
+   
     <div className="container">
       <h1 className="text-center">Tablero Sprint</h1>
       <div className="row">
-      <CardColumn
-            title="Pendientes"
-            tasks={tasks.filter((task) => task.status === 'pending')}
-            addTask={addTask}
-            onTaskMove={moveTask} 
-            editTask={editTask}
-            />
-            <CardColumn
-            title="EN CURSO"
-            tasks={tasks.filter((task) => task.status === 'inprogress')}
-            addTask={addTask}
-            onTaskMove={moveTask} 
-            editTask={editTask}
-            />
-            <CardColumn
-            title="LISTO"
-            tasks={tasks.filter((task) => task.status === 'done')}
-            addTask={addTask}
-            onTaskMove={moveTask} 
-            editTask={editTask}
-            />
-
+        <CardColumn
+          title="Pendientes"
+          tasks={tasks.filter((task) => task.status === 'pending')}
+          addTask={addTask}
+          onDrop={(taskId) => handleDrop(taskId, 'pending')} // Corrected here
+          editTask={editTask}
+        />
+        <CardColumn
+          title="EN CURSO"
+          tasks={tasks.filter((task) => task.status === 'inprogress')}
+          addTask={addTask}
+          onDrop={(taskId) => handleDrop(taskId, 'inprogress')} // Corrected here
+          editTask={editTask}
+        />
+        <CardColumn
+          title="LISTO"
+          tasks={tasks.filter((task) => task.status === 'done')}
+          addTask={addTask}
+          onDrop={(taskId) => handleDrop(taskId, 'done')}// Corrected here
+          editTask={editTask}
+        />
       </div>
     </div>
   );
