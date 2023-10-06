@@ -1,50 +1,110 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Card } from 'react-bootstrap';
 
 function ProyectoList() {
   const [proyectos, setProyectos] = useState([]);
   const [nombreProyecto, setNombreProyecto] = useState('');
   const [descripcionProyecto, setDescripcionProyecto] = useState('');
-  const [showAgregarModal, setShowAgregarModal] = useState(false); // Modal para agregar proyectos
-  const [showEditarModal, setShowEditarModal] = useState(false);   // Modal para editar proyectos
+  const [showAgregarModal, setShowAgregarModal] = useState(false);
+  const [showEditarModal, setShowEditarModal] = useState(false);
   const [editProyectoId, setEditProyectoId] = useState(null);
+
+  // Función para obtener la lista de proyectos
+  const obtenerProyectos = () => {
+    const userData = JSON.parse(sessionStorage.getItem('userData'))
+    fetch('http://127.0.0.1:8000/api/projectsManagement/getProjectList', {
+      headers: {
+        'Authorization': `Bearer ${userData}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error en la solicitud');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setProyectos(data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener la lista de proyectos:', error);
+      });
+  };
+  
+  useEffect(() => {
+    obtenerProyectos();
+  }, []);
 
   const agregarProyecto = () => {
     if (nombreProyecto && descripcionProyecto) {
-      const nuevoProyecto = {
-        id: Date.now(),
-        nombre: nombreProyecto,
-        descripcion: descripcionProyecto,
-      };
-      setProyectos([...proyectos, nuevoProyecto]);
-      setNombreProyecto('');
-      setDescripcionProyecto('');
-      setShowAgregarModal(false); // Cierra el modal de agregar proyectos
+      // Realiza una solicitud POST para crear un nuevo proyecto
+      fetch('http://127.0.0.1:8000/api/projectsManagement/createProject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: nombreProyecto, description: descripcionProyecto }),
+      })
+        .then(() => {
+          // Después de crear el proyecto, actualiza la lista de proyectos
+          obtenerProyectos();
+
+          setNombreProyecto('');
+          setDescripcionProyecto('');
+          setShowAgregarModal(false);
+        })
+        .catch((error) => {
+          console.error('Error al crear un proyecto:', error);
+        });
     }
   };
 
   const editarProyecto = (id) => {
     setEditProyectoId(id);
-    setShowEditarModal(true); // Muestra el modal de editar proyectos
+    setShowEditarModal(true);
     const proyectoAEditar = proyectos.find((proyecto) => proyecto.id === id);
     setNombreProyecto(proyectoAEditar.nombre);
     setDescripcionProyecto(proyectoAEditar.descripcion);
   };
 
   const guardarCambiosProyecto = () => {
-    const proyectosActualizados = proyectos.map((proyecto) =>
-      proyecto.id === editProyectoId
-        ? { ...proyecto, nombre: nombreProyecto, descripcion: descripcionProyecto }
-        : proyecto
-    );
-    setProyectos(proyectosActualizados);
-    setShowEditarModal(false); // Cierra el modal de editar proyectos
+    if (editProyectoId) {
+      // Realiza una solicitud PUT para actualizar el proyecto
+      fetch(`http://127.0.0.1:8000/api/projectsManagement/updateProject`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ project_id: editProyectoId, name: nombreProyecto, description: descripcionProyecto }),
+      })
+        .then(() => {
+          // Después de actualizar el proyecto, actualiza la lista de proyectos
+          obtenerProyectos();
+
+          setShowEditarModal(false);
+        })
+        .catch((error) => {
+          console.error('Error al actualizar un proyecto:', error);
+        });
+    }
   };
 
   const eliminarProyecto = (id) => {
-    const proyectosActualizados = proyectos.filter((proyecto) => proyecto.id !== id);
-    setProyectos(proyectosActualizados);
+    // Realiza una solicitud DELETE para eliminar un proyecto
+    fetch(`http://127.0.0.1:8000/api/projectsManagement/deleteProject`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ project_id: id }),
+    })
+      .then(() => {
+        // Después de eliminar el proyecto, actualiza la lista de proyectos
+        obtenerProyectos();
+      })
+      .catch((error) => {
+        console.error('Error al eliminar un proyecto:', error);
+      });
   };
 
   return (
@@ -56,8 +116,8 @@ function ProyectoList() {
           <div key={proyecto.id} className="col-md-4 mb-3">
             <Card>
               <Card.Body>
-                <Card.Title>{proyecto.nombre}</Card.Title>
-                <Card.Text>{proyecto.descripcion}</Card.Text>
+                <Card.Title>{proyecto.name}</Card.Title> 
+                <Card.Text>{proyecto.description}</Card.Text> 
                 <Button variant="info" onClick={() => editarProyecto(proyecto.id)}>Editar</Button>
                 <Button variant="danger" onClick={() => eliminarProyecto(proyecto.id)}>Eliminar</Button>
               </Card.Body>
