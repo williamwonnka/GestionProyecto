@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { AuthRoutes } from "../auth/routes/AuthRoutes"
 import { GestionRoutes } from "../gestion/routes/GestionRoutes"
+import ProjectRoute from '../project/routes/ProjectRoutes';
 
 
 
@@ -14,6 +15,7 @@ export const AppRouter = () => {
 
       {/* Protected routes (accessible only after authentication) */}
       <Route path="/*" element={<GestionRoutes />} />
+      <Route path="/proyecto/*" element={<ProjectRoute />} />
     </Routes>
   )
 }
