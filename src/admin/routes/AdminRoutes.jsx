@@ -6,8 +6,8 @@ import RegistroUsuario from '../components/RegistroUsuario';
 const AdminRoutes = () => {
   return (
     <Routes>
-      <Route path="/admin/list" element={<UserList />} />
-      <Route path="/admin/registro" element={<RegistroUsuario />} />
+      <Route path="/" element={<UserList />} />
+      <Route path="/registro" element={<RegistroUsuario />} />
     </Routes>
   );
 };
