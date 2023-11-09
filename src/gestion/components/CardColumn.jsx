@@ -27,12 +27,6 @@ export const CardColumn = ( { title, tasks, addTask, onDrop, editTask} ) => {
     setShowModal(false);
   };
 
-//   // Función para manejar el evento de soltar una tarea en la columna
-//   const handleDrop = (e) => {
-//     e.preventDefault();
-//     const taskId = e.dataTransfer.getData('task-id');
-//     onDrop(taskId); // Call the onDrop prop with the taskId when a task is dropped
-//   };
   
   useEffect(() => {
     // Code to execute when tasks prop changes

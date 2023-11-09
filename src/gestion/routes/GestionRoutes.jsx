@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { GestionPage } from "../pages/GestionPage"
+import { SprintListPage } from "../pages/SprintListPage"
+import { SprintPage } from "../pages/SprintsPage"
 
 export const GestionRoutes = () => {
 
@@ -9,6 +11,8 @@ export const GestionRoutes = () => {
     return (
       <Routes>
           <Route path="/Gestion/Dashboard" element= { <GestionPage />} />
+          <Route path="/Gestion/Dashboard/SprintList" element= { <SprintPage />} />
+          <Route path="/Gestion/Dashboard/SprintListPage/:projectId" element= { <SprintListPage/>} />
           
       </Routes>
     )
